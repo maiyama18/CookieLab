@@ -1,47 +1,49 @@
 import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:cookielab/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ApiClient {
   static final ApiClient _instance = ApiClient._internal();
-  late final Dio _dio;
-  late final CookieJar _cookieJar;
-
   factory ApiClient() => _instance;
 
-  ApiClient._internal() {
-    _init();
+  ApiClient._internal();
+
+  Dio? _dio;
+
+  Future<Dio> get dio async {
+    if (_dio == null) await _init();
+    return _dio!;
   }
 
   Future<void> _init() async {
     final Directory appDocDir = await getApplicationDocumentsDirectory();
 
-    _cookieJar = PersistCookieJar(
+    final cookieJar = PersistCookieJar(
       ignoreExpires: true,
       storage: FileStorage('${appDocDir.path}/.cookies/'),
     );
 
-    _dio = Dio(BaseOptions(
+    final dio = Dio(BaseOptions(
       baseUrl: 'http://localhost:8080',
       connectTimeout: const Duration(seconds: 5),
       validateStatus: (status) => status != null && (status >= 200 && status < 500),
     ));
-
-    _dio.interceptors.addAll([
-      CookieManager(_cookieJar),
+    dio.interceptors.addAll([
+      CookieManager(cookieJar),
       LogInterceptor(responseBody: true),
     ]);
+    _dio = dio;
   }
 
   Future<void> login({
     required String username,
     required String password,
   }) async {
-    final response = await _dio.post(
+    final response = await (await dio).post(
       '/login',
       data: {'username': username, 'password': password},
     );
@@ -55,7 +57,7 @@ class ApiClient {
   }
 
   Future<String> fetchHelloMessage() async {
-    final response = await _dio.get('/hello');
+    final response = await (await dio).get('/hello');
 
     if (response.statusCode != 200) {
       throw ApiException(
@@ -67,7 +69,7 @@ class ApiClient {
   }
 
   Future<void> logout() async {
-    final response = await _dio.post('/logout');
+    final response = await (await dio).post('/logout');
 
     if (response.statusCode != 200) {
       throw ApiException(
