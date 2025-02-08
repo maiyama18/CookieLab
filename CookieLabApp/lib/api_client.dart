@@ -52,6 +52,17 @@ class ApiClient {
       );
     }
   }
+
+  Future<void> logout() async {
+    final response = await _dio.post('/logout');
+
+    if (response.statusCode != 200) {
+      throw ApiException(
+        code: response.statusCode,
+        message: 'Login failed',
+      );
+    }
+  }
 }
 
 class ApiException implements Exception {

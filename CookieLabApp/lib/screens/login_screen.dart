@@ -1,6 +1,8 @@
 import 'package:cookielab/api_client.dart';
 import 'package:flutter/material.dart';
 
+import 'hello_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -65,6 +67,11 @@ class _LoginScreenState extends State<LoginScreen> {
         username: _usernameController.text,
         password: _passwordController.text,
       );
+      if (mounted) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const HelloScreen()),
+        );
+      }
     } on ApiException catch (e) {
       _showError(e.message);
     } catch (e) {
