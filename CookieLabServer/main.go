@@ -10,7 +10,7 @@ func main() {
 	r.Use(simulateDelayMiddleware())
 
 	r.POST("/login", loginHandler)
-	r.GET("/hello", authMiddleware(), helloHandler)
+	r.GET("/message", authMiddleware(), messageHandler)
 	r.POST("/logout", authMiddleware(), logoutHandler)
 
 	err := r.Run(":8080")

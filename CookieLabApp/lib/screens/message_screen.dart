@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 
 import '../api_client.dart';
 
-class HelloScreen extends StatefulWidget {
-  const HelloScreen({super.key});
+class MessageScreen extends StatefulWidget {
+  const MessageScreen({super.key});
 
   @override
-  State<HelloScreen> createState() => _HelloScreenState();
+  State<MessageScreen> createState() => _MessageScreenState();
 }
 
-class _HelloScreenState extends State<HelloScreen> {
+class _MessageScreenState extends State<MessageScreen> {
   bool _isLoading = false;
-  String _text = 'Not loaded';
+  String _text = 'No message...';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Hello')),
+      appBar: AppBar(title: const Text('Message')),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Center(
@@ -25,7 +25,7 @@ class _HelloScreenState extends State<HelloScreen> {
             children: [
               Text(_text),
               ElevatedButton.icon(
-                onPressed: _isLoading ? null : _fetchHelloMessage,
+                onPressed: _isLoading ? null : _fetchMessage,
                 icon: SizedBox(
                   width: 20,
                   height: 20,
@@ -34,7 +34,7 @@ class _HelloScreenState extends State<HelloScreen> {
                     color: Colors.white,
                   ) : Icon(Icons.message),
                 ),
-                label: Text('Hello', style: const TextStyle(fontSize: 16)),
+                label: Text('Get Message', style: const TextStyle(fontSize: 16)),
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
@@ -56,12 +56,12 @@ class _HelloScreenState extends State<HelloScreen> {
     );
   }
 
-  Future<void> _fetchHelloMessage() async {
+  Future<void> _fetchMessage() async {
     setState(() => _isLoading = true);
     setState(() => _text = 'Loading...');
     try {
-      final helloMessage = await ApiClient().fetchHelloMessage();
-      setState(() => _text = helloMessage);
+      final message = await ApiClient().fetchMessage();
+      setState(() => _text = message);
     } on ApiException catch (e) {
       _showError(e.message);
     } catch (e) {

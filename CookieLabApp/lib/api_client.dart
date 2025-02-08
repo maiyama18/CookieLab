@@ -56,13 +56,13 @@ class ApiClient {
     }
   }
 
-  Future<String> fetchHelloMessage() async {
-    final response = await (await dio).get('/hello');
+  Future<String> fetchMessage() async {
+    final response = await (await dio).get('/message');
 
     if (response.statusCode != 200) {
       throw ApiException(
         code: response.statusCode,
-        message: 'ハローに失敗しました: ${response.data['error']}',
+        message: 'メッセージ取得に失敗しました: ${response.data['error']}',
       );
     }
     return response.data['message'];

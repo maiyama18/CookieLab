@@ -32,7 +32,7 @@ func loginHandler(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func helloHandler(c *gin.Context) {
+func messageHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Hello, world!"})
 }
 
