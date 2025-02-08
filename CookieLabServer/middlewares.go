@@ -3,7 +3,15 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
+
+func simulateDelayMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		time.Sleep(1 * time.Second)
+		c.Next()
+	}
+}
 
 func authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {

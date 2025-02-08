@@ -7,6 +7,8 @@ import (
 func main() {
 	r := gin.Default()
 
+	r.Use(simulateDelayMiddleware())
+
 	r.POST("/login", loginHandler)
 	r.GET("/hello", authMiddleware(), helloHandler)
 	r.POST("/logout", authMiddleware(), logoutHandler)
