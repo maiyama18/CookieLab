@@ -1,3 +1,4 @@
+import 'package:cookielab/views/message_view.dart';
 import 'package:flutter/material.dart';
 
 import '../api_client.dart';
@@ -23,19 +24,7 @@ class _MessageScreenState extends State<MessageScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(_text),
-              ElevatedButton.icon(
-                onPressed: _isLoading ? null : _fetchMessage,
-                icon: SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: _isLoading ? CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  ) : Icon(Icons.message),
-                ),
-                label: Text('Get Message', style: const TextStyle(fontSize: 16)),
-              ),
+              MessageView(),
               const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: _isLoading ? null : _logout,

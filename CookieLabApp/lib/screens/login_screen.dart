@@ -1,4 +1,5 @@
 import 'package:cookielab/api_client.dart';
+import 'package:cookielab/views/message_view.dart';
 import 'package:flutter/material.dart';
 
 import 'message_screen.dart';
@@ -51,6 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 label: Text('Login', style: const TextStyle(fontSize: 16)),
               ),
+              const SizedBox(height: 20),
+              MessageView(),
             ],
           ),
         ),
