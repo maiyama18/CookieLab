@@ -28,6 +28,7 @@ class ApiClient {
     _dio = Dio(BaseOptions(
       baseUrl: 'http://localhost:8080',
       connectTimeout: const Duration(seconds: 5),
+      validateStatus: (status) => status != null && (status >= 200 && status < 500),
     ));
 
     _dio.interceptors.addAll([
@@ -48,7 +49,7 @@ class ApiClient {
     if (response.statusCode != 200) {
       throw ApiException(
         code: response.statusCode,
-        message: 'Login failed',
+        message: 'ログインに失敗しました: ${response.data['error']}',
       );
     }
   }
@@ -59,7 +60,7 @@ class ApiClient {
     if (response.statusCode != 200) {
       throw ApiException(
         code: response.statusCode,
-        message: 'Fetch hello message failed',
+        message: 'ハローに失敗しました: ${response.data['error']}',
       );
     }
     return response.data['message'];
@@ -71,7 +72,7 @@ class ApiClient {
     if (response.statusCode != 200) {
       throw ApiException(
         code: response.statusCode,
-        message: 'Login failed',
+        message: 'ログアウトに失敗しました: ${response.data['error']}',
       );
     }
   }
