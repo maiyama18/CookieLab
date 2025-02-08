@@ -1,3 +1,4 @@
+import 'package:cookielab/api_client.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,6 +12,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController(text: 'm@example.com');
   final _passwordController = TextEditingController(text: 'password1');
+
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +37,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 validator: (v) => v!.isEmpty ? 'Required' : null,
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _login,
-                child: const Text('Login'),
+              ElevatedButton.icon(
+                onPressed: _isLoading ? null : _login,
+                icon: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: _isLoading ? CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ) : Icon(Icons.login),
+                ),
+                label: Text('Login', style: const TextStyle(fontSize: 16)),
               ),
             ],
           ),
@@ -48,6 +59,29 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
-    // TODO
+    setState(() => _isLoading = true);
+    try {
+      await ApiClient().login(
+        username: _usernameController.text,
+        password: _passwordController.text,
+      );
+    } on ApiException catch (e) {
+      _showError(e.message);
+    } catch (e) {
+      _showError('予期せぬエラーが発生しました');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.redAccent,
+      ),
+    );
   }
 }
