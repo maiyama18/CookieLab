@@ -1,7 +1,10 @@
 import 'package:cookielab/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'logger.dart';
+
 void main() {
+  logger.d('App started');
   runApp(const MyApp());
 }
 
