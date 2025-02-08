@@ -53,6 +53,18 @@ class ApiClient {
     }
   }
 
+  Future<String> fetchHelloMessage() async {
+    final response = await _dio.get('/hello');
+
+    if (response.statusCode != 200) {
+      throw ApiException(
+        code: response.statusCode,
+        message: 'Fetch hello message failed',
+      );
+    }
+    return response.data['message'];
+  }
+
   Future<void> logout() async {
     final response = await _dio.post('/logout');
 
